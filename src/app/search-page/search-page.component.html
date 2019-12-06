@@ -1,0 +1,195 @@
+<!-- Header Row -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{username}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" routerLink="/updateProfile" routerLinkActive="active">Profile</a>
+          <a class="dropdown-item" routerLink="/takeQuiz" routerLinkActive="active">Take Quiz</a>
+          <a class="dropdown-item" routerLink="/logout" routerLinkActive="active">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Chatbot -->
+<!-- <app-chatbot (domainReceived)="domainReceivedHandler($event)">
+
+</app-chatbot> -->
+
+<div class="container-fluid h-100" style="background-color: #3572B7;">
+  <br/><br/><br/><br/><br/>
+  <div class="row h-100">
+    <br/><br/><br/><br/><br/>
+    <div class="col-md-12">
+      <br/><br/><br/><br/>
+      <div class="wrap">
+        <div class="search">
+          <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-10">
+              <input class="form-control" id="myInput" type="text" placeholder="Find me the best courses on..." 
+              name="myInput" [(ngModel)]="keyword" (ngModelChange)="autoSuggest()">
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="searchButton" style="height: 40px; border-radius: 1.5rem;" (click)="performSearch()">
+                Search
+              </button>
+            </div>
+          </div>
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+<br/>
+<br/>
+
+<!-- Drag Scroll -->
+<div class="row">
+  <div class="container-fluid">
+    <h3 style="color: black; text-align: center;">Search Results: </h3>
+    <drag-scroll #nav [scrollbar-hidden]="true" style="min-height: 400px;">
+        <div drag-scroll-item class="card" style="max-width: 250px; height: 100%; overflow: auto; margin-left: 10px;" *ngFor="let course of courses">
+          <img class="card-img-top" src="../../assets/udemy.png" *ngIf="course.course_source == 'udemy'" width="100px" height="150px">
+          <img class="card-img-top" src="../../assets/coursera.png" *ngIf="course.course_source == 'coursera'" width="100px" height="150px">
+          <img class="card-img-top" src="../../assets/youtube.png" *ngIf="course.course_source == 'youtube'" width="100px" height="150px">
+          <img class="card-img-top" src="../../assets/edx.png" *ngIf="course.course_source == 'edx'" width="100px" height="150px">
+          <div class="card-body">
+            <h5 class="card-title">{{course.course_title}}</h5>
+            <p class="card-text">By {{course.instructor_name}}</p><br/>
+            <p class="card-text">Rating: </p>
+            <img class="img-right" src="../../assets/0_stars.png" *ngIf="course.course_rating <= 0" width="100px">
+            <img class="img-right" src="../../assets/1_stars.png" *ngIf="(course.course_rating > 0) && (course.course_rating <= 1)" width="100px">
+            <img class="img-right" src="../../assets/2_stars.png" *ngIf="(course.course_rating > 1) && (course.course_rating <= 2)" width="100px">
+            <img class="img-right" src="../../assets/3_stars.png" *ngIf="(course.course_rating > 2) && (course.course_rating <= 3)" width="100px">
+            <img class="img-right" src="../../assets/4_stars.png" *ngIf="(course.course_rating > 3) && (course.course_rating <= 4)" width="100px">
+            <img class="img-right" src="../../assets/5_stars.png" *ngIf="(course.course_rating > 4) && (course.course_rating <= 5)" width="100px">
+            <img class="img-right" src="../../assets/3_stars.png" *ngIf="(course.course_rating == null)" width="100px">
+            <br/>
+            <p class="card-text pull-right" style="text-align: right;" *ngIf="course.course_price != 0">Price: {{course.course_price}}</p>
+            <p class="card-text pull-right" style="text-align: right;" *ngIf="course.course_price == 0">Price: Free</p> 
+          </div>
+          <div class="card-footer">
+            <a class="btn btn-primary" style="background-color: #3572B7;" 
+              (click)="fetchDetails(course.course_title, course.course_source)">More Details</a>
+          </div>
+        </div>
+    </drag-scroll>
+    <br/>
+    <div class="pull-right" style="text-align: right; margin-right: 10px;" *ngIf="courses">
+      <button class="btn-lg custom-btn" (click)="moveLeft()">Prev</button>&nbsp;&nbsp;&nbsp;
+      <button class="btn-lg custom-btn" (click)="moveRight()">Next</button>
+    </div>
+  </div>
+</div>
+<br/>
+
+<!-- Course Details -->
+<div class="row" *ngIf="selectedCourse">
+  <div class="container-fluid">
+    <div class="card shadow p-3 mb-5 rounded" style="text-align: center;">
+      <h1>Course Details</h1>
+      <br/>
+      <div class="row">
+        <div *ngIf="errorMsg">
+          <span style="color: red">{{errorMsg}}</span>
+        </div>
+        <div class="col-md-12">
+            <div class="container register-form" style="border-radius: 5px;">
+                <div class="form">
+                    <div class="note">
+                        <h2>{{selectedCourse.course_title}}</h2>
+                    </div>
+                    <div class="form-content">
+                        <table border="0" style="border-radius: 5px; background-color:lightblue; width: 100%; margin: 10px; padding: 10px">
+                          <tr>
+                            <th>Platform : </th>
+                            <td>
+                              <img src="../../assets/udemy.png" *ngIf="selectedCourse.course_source == 'udemy'" width="70px" height="20px" style="border-radius: 5px;">
+                              <img src="../../assets/coursera.png" *ngIf="selectedCourse.course_source == 'coursera'" width="70px" height="20px" style="border-radius: 5px;">
+                              <img src="../../assets/youtube.png" *ngIf="selectedCourse.course_source == 'youtube'" width="70px" height="20px" style="border-radius: 5px;">
+                              <img src="../../assets/edx.png" *ngIf="selectedCourse.course_source == 'edx'" width="70px" height="20px" style="border-radius: 5px;">
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>Desc : </th>
+                            <td>{{selectedCourse.course_description}}</td>
+                          </tr>
+                          <tr>
+                            <th>Certificate Price : </th>
+                            <td>{{selectedCourse.certificate_price}}</td>
+                          </tr>	
+                          <tr>
+                            <th>Course Price : </th>
+                            <td>{{selectedCourse.course_price}}</td>
+                          </tr>
+                          <tr>
+                            <th>Rating : </th>
+                            <td>{{selectedCourse.course_rating}}</td>
+                          </tr>
+                        </table>
+                        <table border="0" style="border-radius: 5px;background-color:lightblue; width: 100%; margin: 10px; padding: 10px">
+                          <tr>
+                            <th>Photo: </th>
+                            <td>
+                              <img src="selectedCourse.thumbnail_url" alt="Course Thumbnail">
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>Name : </th>
+                            <td *ngIf="selectedCourse.course_source !== 'coursera'">{{selectedCourse.instructor_name}}</td>
+                            <td *ngIf="selectedCourse.course_source === 'coursera'">{{selectedCourse.instructors[0].instructor_name}}</td>
+                          </tr>
+                          <tr>
+                            <th>Desc : </th>
+                            <td *ngIf="selectedCourse.course_source !== 'coursera'">{{selectedCourse.instructor_description}}</td>
+                            <td *ngIf="selectedCourse.course_source === 'coursera'">{{selectedCourse.instructors[0].instructor_description}}</td>
+                          </tr>
+                        </table>
+                      
+              <!-- <div class="container" style="border-radius: 5px;background-color:lightblue; width: 100%; margin: 10px; padding: 10px">
+                <div class="row text-center">
+                      <div class="col">
+                        <div class="counter">
+                          <i class="fa fa-code fa-2x"></i>
+                          <h2 class="timer count-title count-number" data-to="100" data-speed="1500"></h2>
+                           <p class="count-text ">Other Details</p>
+                      </div>
+                  </div>
+                </div>
+              </div> -->
+    
+                        <table border="0" style="border-radius: 5px;background-color:lightblue; width: 100%; margin: 10px; padding: 10px">
+                          <tr>
+                            <th>Enrollment Count : </th>
+                            <td>{{selectedCourse.course_enrollment_count}}</td>
+                          </tr>
+                          <tr>
+                            <th>Rating Count : </th>
+                            <td>{{selectedCourse.course_rating_count}}</td>
+                          </tr>
+                          <tr>
+                            <th>Duration : </th>
+                            <td>{{selectedCourse.duration}} {{selectedCourse.duration_in}}</td>
+                          </tr>
+                        </table>
+                        <a [attr.href]="selectedCourse.course_link" target="_blank">
+                          <button type="button" class="btnSubmit" style="margin: 3px;">Direct Link</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

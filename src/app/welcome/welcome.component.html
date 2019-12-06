@@ -1,0 +1,204 @@
+<!-- Header Row -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+  <a class="navbar-brand text-white" href="#">
+    &nbsp;&nbsp;&nbsp;<b>A.R.J.U.N</b>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <ul class="navbar-nav mr-auto">
+      
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <a routerLink="/logout" routerLinkActive="active">
+        <button class="btn custom-btn my-2 my-sm-0" type="submit">Logout</button>
+      </a>
+    </form>
+  </div>
+</nav>
+
+<!-- <app-chatbot>
+
+</app-chatbot> -->
+
+<!-- Fill Details Row -->
+<div class="container-fluid h-100" style="background-color: #3572B7" *ngIf="profile_incomplete">
+  <div class="row h-100">
+    <div *ngIf="errorMsg">
+      <span style="color: red;">{{errorMsg}}</span>
+    </div>
+    <!-- Academic Details Column -->
+    <div class="col-md-12">
+      <br/>
+      <h3>Academic Details:</h3>
+      <table class="table table-striped table-bordered">
+          <thead>
+              <tr>
+                  <th>Degree</th>
+                  <th>Current Role</th>
+                  <th>Institute Name</th>
+                  <th>Institute City</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let degree of degrees; let i = index">
+                  <td>
+                    <input [(ngModel)]="degree.name" class="form-control" type="text" name="{{degree.name}}" />
+                  </td>
+                  <td>
+                    <select [(ngModel)]="degree.role" class="form-control" name="{{degree.role}}">
+                      <option value="Student">Student</option>
+                      <option value="Developer">Developer</option>
+                      <option value="Researcher">Researcher</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input [(ngModel)]="degree.institute_name" class="form-control" type="text" name="{{degree.institute_name}}" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="degree.institute_city" class="form-control" type="text" name="{{degree.institute_city}}" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="degree.start_date" class="form-control" type="text" name="{{degree.start_date}}" placeholder="MM/YY"/>
+                  </td>
+                  <td>
+                    <input [(ngModel)]="degree.end_date" class="form-control" type="text" name="{{degree.end_date}}" placeholder="MM/YY"/>
+                  </td>
+                  <td>
+                    <button class="btn custom-btn"  type="button" (click)="deleteFieldValue(i)">Delete</button>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      <input class="form-control" type="text" id="newAttributeCode" [(ngModel)]="newDegree.name" name="newDegree.name" />
+                  </td>
+                  <td>
+                      <select [(ngModel)]="newDegree.role" class="form-control" name="{{newDegree.role}}">
+                        <option value="Student">Student</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Researcher">Researcher</option>
+                      </select>
+                  </td>
+                  <td>
+                      <input class="form-control" type="text" id="newAttributePrice" [(ngModel)]="newDegree.institute_name" name="newDegree.institute_name" />
+                  </td>
+                  <td>
+                    <input class="form-control" type="text" id="newAttributePrice" [(ngModel)]="newDegree.institute_city" name="newDegree.institute_city" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="newDegree.start_date" class="form-control" type="text" name="{{newDegree.start_date}}" placeholder="MM/YY"/>
+                  </td>
+                  <td>
+                    <input [(ngModel)]="newDegree.end_date" class="form-control" type="text" name="{{newDegree.end_date}}" placeholder="MM/YY"/>
+                  </td>
+                  <td>
+                    <button class="btn-lg custom-btn" type="submit" (click)="addFieldValue()">Add</button>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      <br/>
+    </div>
+
+    <div class="container-fluid h-100">
+    <div class="row h-100">
+    <!-- Previouses Courses Details -->
+    <div class="col-md-12">
+      <br/>
+      <h3>Previous Courses Details:</h3>
+      <table class="table table-striped table-bordered" style="margin: 2px;">
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Online/Offline?</th>
+              <th>Domain</th>
+              <th>Institute/Platform</th>
+              <th>Rating (/10)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of courses">
+            <td>
+              <input [(ngModel)]="course.name" class="form-control" type="text" name="{{course.name}}" />
+            </td>
+            <td>
+              <select [(ngModel)]="course.mode" class="form-control" name="{{course.mode}}">
+                <option value="online">Online</option>
+                <option value="offline">Off-line</option>
+              </select>
+            </td>
+            <td>
+              <input class="form-control" id="myInput" type="text" placeholder="Domain" 
+              name="{{course.domain}}" [(ngModel)]="course.domain" (ngModelChange)="autoSuggest()">
+            </td>
+            <td>
+              <input [(ngModel)]="course.platform" class="form-control" type="text" name="{{course.platform}}" />
+            </td>
+            <td>
+              <input [(ngModel)]="course.rating" class="form-control" type="text" name="{{course.rating}}"/>
+            </td>
+            <td>
+              <button class="btn custom-btn"  type="button" (click)="deleteCourse(i)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input class="form-control" type="text" id="newAttributeCode" [(ngModel)]="newCourse.name" name="newCourse.name" />
+            </td>
+            <td>
+              <select [(ngModel)]="newCourse.mode" class="form-control" name="{{newCourse.mode}}">
+                <option value="online">Online</option>
+                <option value="offline">Off-line</option>
+              </select>
+            </td>
+            <td>
+              <input id="myInput1" class="form-control" type="text" placeholder="Domain" 
+              name="{{newCourse.domain}}" [(ngModel)]="newCourse.domain" (ngModelChange)="autoSuggest1()">
+            </td>
+            <td>
+              <input [(ngModel)]="newCourse.platform" class="form-control" type="text" name="{{newCourse.platform}}" />
+            </td>
+            <td>
+                <input [(ngModel)]="newCourse.rating" class="form-control" type="text" name="{{newCourse.rating}}"/>
+            </td>
+            <td>
+              <button class="btn-lg custom-btn" type="submit" (click)="addCourse()">Add</button>
+            </td>
+        </tr>
+        </tbody>
+      </table>
+      <br/>
+    </div>
+    </div>
+    </div>
+    <br/><br/>
+
+    <div class="container-fluid h-100">
+      <div class="row h-100">
+        <!-- Interests -->
+        <div class="col-md-6">
+          <label for="domain">Domain you're interested in:</label>
+          <input id="myInput2" class="form-control" type="text" name="myCountry2" placeholder="Domain" 
+            name="{{interests.domain}}" [(ngModel)]="interests.domain" (ngModelChange)="autoSuggest2()">
+        </div>
+        <div class="col-md-6">
+          <label for="goal">What role do you want to pursue in the future?</label>
+          <input class="form-control" type="text" name="interests.goal" placeholder="Future Goal" 
+            name="{{interests.goal}}" [(ngModel)]="interests.goal">          
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <br/><br/>
+      <div style="text-align: center;">
+        <button type="submit" class="btn-lg custom-btn" (click)="doSubmit()">Save Changes</button>
+      </div>
+      <br/><br/>
+    </div>
+
+  </div>
+</div>

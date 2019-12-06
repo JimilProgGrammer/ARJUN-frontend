@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+body, html {
+    color: white;
+}
+.btn {
+    background-color: transparent;
+}
+.btn-lg {
+    background-color: grey;
+}
+.custom-btn {
+    border-color: #3572b7;
+    color: white;
+}
+.custom-btn:hover {
+    background-color: #3572b7;
+    color: white;
+}
+a {
+    color: #3572b7;
+}
+.card {
+    transition: box-shadow .3s;
+    color: black;
+    background: rgba(245, 245, 245, 0.3);
+}
+.card:hover {
+    box-shadow: 0 0 21px rgba(33,33,33,.4);
+}

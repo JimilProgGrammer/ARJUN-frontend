@@ -1,0 +1,105 @@
+<!-- Header Row -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{currentUsername}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" routerLink="/updateProfile" routerLinkActive="active">Profile</a>
+          <a class="dropdown-item" routerLink="/takeQuiz" routerLinkActive="active">Take Quiz</a>
+          <a class="dropdown-item" routerLink="/logout" routerLinkActive="active">Logout</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/searchPage" routerLinkActive="active">Home</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!-- End Header Row -->
+<br/><br/>
+<div class="row">
+  <div class="container">
+    <div class="card shadow p-3 mb-5 rounded">
+
+      <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+          <h2>Take A Quiz</h2>
+        </div>
+      </div>
+      <br/>
+
+      <!-- ROW 0: Domain Select -->
+      <div class="row">
+        <div class="col-md-10" style="text-align: center;">
+          <input class="form-control" id="myInput" type="text" placeholder="Select a domain" 
+            name="myInput" [(ngModel)]="domain" (ngModelChange)="autoSuggest()">
+        </div>
+        <div class="col-md-2" style="text-align: center;">
+          <button type="submit" class="btn custom-btn" style="color: black;" (click)="onDomainSelected()">
+            Take Quiz
+          </button>
+        </div>
+      </div>
+
+      <br/>
+      <!-- ROW 1: Questions -->
+      <div class="row" *ngIf="questions">
+        <div class="col-md-12">
+          <div class="row" *ngFor="let question of questions; let i = index">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="container">
+                  {{i+1}}. {{question.question}}
+                </div>
+              </div>
+              <div class="row" *ngFor="let option of question.options">
+                <div class="container">
+                  <input type="radio" name="quizOption{{i}}" (change)="radioBtnEvent(question.question, option)"> {{option}}
+                </div>
+              </div>
+              <br/>
+            </div>
+            <br/>
+          </div>
+        </div>
+        <br/>
+        <div class="row" *ngIf="questions">
+          <div class="col-md-4">
+
+          </div>
+          <div class="col-md-4">
+            <button class="btn custom-btn" style="color: black;" type="submit" (click)="submitQuiz()">Submit Quiz</button>
+          </div>
+          <div class="col-md-4">
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 1 : Error Message -->
+      <br/>
+      <div class="row" *ngIf="errorMsg">
+        <div class="col-md-12">
+          <div class="alert alert-danger">
+            {{errorMsg}}
+          </div>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="expertise">
+        <div class="col-md-12">
+          <div class="alert alert-success">
+            Congratulations! A.R.J.U.N says you're an {{expertise}} in {{domain}}. Your score is {{score}}/9!
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

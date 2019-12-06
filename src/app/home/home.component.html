@@ -1,0 +1,82 @@
+<!-- Header Row -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+  <a class="navbar-brand text-white" href="#">
+    &nbsp;&nbsp;&nbsp;<b>A.R.J.U.N</b>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <ul class="navbar-nav mr-auto">
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <a routerLink="/login" routerLinkActive="active">
+        <button class="btn custom-btn my-2 my-sm-0" type="submit">Login</button>
+      </a>
+    </form>
+  </div>
+</nav>
+
+<!-- About Us Row -->
+<div class="container-fluid h-100" style="background-color: #3572B7">
+  <div class="row h-100">
+    <div class="col-md-6" style="padding-left: 35px; padding-right: 35px;">
+      <br/><br/><br/><br/>
+      <h1><b>Learn Development</b></h1>
+      Business, Technology and Creative Skills taught by industry experts. 
+      Explore a wide range of skills with our professional tutorials.
+      <br/><br/>
+      <div style="text-align: center;">
+        <a routerLink="/login" routerLinkActive="active">
+          <button class="btn-lg custom-btn" type="submit">Get Started!</button>
+        </a>
+      </div>
+    </div>
+    <div class="col-md-6 d-flex align-items-center justify-content-center">
+      <img src="../../assets/macbook.png">
+    </div>
+  </div>
+</div>
+<br/>
+<!-- Trending Courses -->
+<div class="row">
+  <div class="container-fluid">
+    <div class="card shadow p-3 mb-5 rounded" style="text-align: center;">
+      <h1>Trending Courses</h1>
+      <br/>
+      <div class="row">
+        <div *ngIf="errorMsg">
+          <span style="color: red">{{errorMsg}}</span>
+        </div>
+        <div class="card-columns" style="margin-left: 10px; margin-right: 0px;" *ngIf="errorMsg == null">
+          <div class="card" *ngFor="let course of courses" style="max-height: 470px;">
+            <img class="card-img-top" src="../../assets/udemy.png" *ngIf="course.course_source == 'udemy'" width="100px" height="150px">
+            <img class="card-img-top" src="../../assets/coursera.png" *ngIf="course.course_source == 'coursera'" width="100px" height="150px">
+            <img class="card-img-top" src="../../assets/youtube.png" *ngIf="course.course_source == 'youtube'" width="100px" height="150px">
+            <img class="card-img-top" src="../../assets/edx.png" *ngIf="course.course_source == 'edx'" width="100px" height="150px">
+            <div class="card-body" style="height: 100%">
+              <h5 class="card-title">{{course.course_title}}</h5>
+              <p class="card-text" *ngIf="course.course_source !== 'coursera'">By {{course.instructor_name}}</p>
+              <p class="card-text" *ngIf="course.course_source === 'coursera'">By {{course.instructors[0].instructor_name}}</p>
+              <p class="card-text">Rating: </p>
+              <img class="img-right" src="../../assets/0_stars.png" *ngIf="course.course_rating <= 0" width="100px">
+              <img class="img-right" src="../../assets/1_stars.png" *ngIf="(course.course_rating > 0) && (course.course_rating <= 1)" width="100px">
+              <img class="img-right" src="../../assets/2_stars.png" *ngIf="(course.course_rating > 1) && (course.course_rating <= 2)" width="100px">
+              <img class="img-right" src="../../assets/3_stars.png" *ngIf="(course.course_rating > 2) && (course.course_rating <= 3)" width="100px">
+              <img class="img-right" src="../../assets/4_stars.png" *ngIf="(course.course_rating > 3) && (course.course_rating <= 4)" width="100px">
+              <img class="img-right" src="../../assets/5_stars.png" *ngIf="(course.course_rating > 4) && (course.course_rating <= 5)" width="100px">
+              <img class="img-right" src="../../assets/3_stars.png" *ngIf="(course.course_rating == null)" width="100px">
+              <br/>
+              <p class="card-text pull-right" style="text-align: right;" *ngIf="course.course_price > 0">Price: {{course.course_price}}</p>
+              <p class="card-text pull-right" style="text-align: right;" *ngIf="course.course_price == 0 || course.course_price == null">Price: Free</p> 
+            </div>
+            <div class="card-footer">
+              <a [attr.href]="course.course_link" target="_blank" class="btn btn-primary" style="background-color: #3572B7;">Course Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

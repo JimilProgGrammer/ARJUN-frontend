@@ -1,62 +1,40 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>ArjunFrontEnd</title>
-  <base href="/">
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+@Component({
+  selector: 'app-chatbot',
+  templateUrl: './chatbot.component.html',
+  styleUrls: ['./chatbot.component.css']
+})
+export class ChatbotComponent implements OnInit {
 
-  <!-- Bootstrap: CSS Include -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  @Output() domainReceived: EventEmitter<String> = new EventEmitter();
 
-  <!-- Bootstrap: JS and jQuery -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  constructor() { }
 
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  ngOnInit() {
+    this.wrapperFunc();
+  }
 
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  </script>
+  wrapperFunc() {
+    this.display_sendButton_Now();
+    this.hide_sendButton_Now();
+    this.display_sendText_Now();
+    this.hide_sendText_Now();
+    this.display_chatspace_Now();
+    this.hide_chatspace_Now();
+    this.display_chatlogo_Now();
+    this.hide_chatlogo_Now();
+    this.display_speechToTextButton_Now();
+    this.hide_speechToTextButton_Now();
 
-</head>
-<body>
-    <div id="google_translate_element"></div>
+    var voiceOptions = document.getElementById('voiceOptions');
+    var volumeSlider = document.getElementById('volumeSlider');
+    var rateSlider = document.getElementById('rateSlider');
+    var pitchSlider = document.getElementById('pitchSlider');
+    var voiceMap = [];
 
-    <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,hi,ur,gu,bn,kn,ml,mr,ta,te,', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-    }
-   
-      //________________________________SCRIPTING CHATBOT UI SECTION START_____________________________________
-  
-      function display_sendButton_Now(){document.getElementById('sendButton_id').style.visibility='visible'};
-      function hide_sendButton_Now(){document.getElementById('sendButton_id').style.visibility='hidden'};
-      function display_sendText_Now(){document.getElementById('sendText_id').style.visibility='visible';document.getElementById('sendText_id').focus();};
-      function hide_sendText_Now(){document.getElementById('sendText_id').style.visibility='hidden';};
-      function display_chatspace_Now(){document.getElementById('chatspace_id').style.display='block';};
-      function hide_chatspace_Now(){document.getElementById('chatspace_id').style.display='none'};
-      function display_chatlogo_Now(){document.getElementById('chatspace_logo_id').style.display='block';};
-      function hide_chatlogo_Now(){document.getElementById('chatspace_logo_id').style.display='none';};
-      function display_speechToTextButton_Now(){document.getElementById('speechToText_id').style.visibility='visible';};
-      function hide_speechToTextButton_Now(){document.getElementById('speechToText_id').style.visibility='hidden';};
-    
-      //______________________________SCRIPTING CHATBOT UI SECTION END_______________________________________
-  
-      //______________________________SCRIPTING TEXT-TO-SPEECH SECTION START_________________________________
-      
-      var voiceOptions = document.getElementById('voiceOptions');
-      var volumeSlider = document.getElementById('volumeSlider');
-      var rateSlider = document.getElementById('rateSlider');
-      var pitchSlider = document.getElementById('pitchSlider');
-      var voiceMap = [];
-    
-      function checkCompatibilty() 
+    function checkCompatibilty() 
       {
         if(!('speechSynthesis' in window)){
           alert('Your browser is not supported. If google chrome, please upgrade!!');
@@ -88,16 +66,49 @@
       function speak (myText) 
       {
         var msg = new SpeechSynthesisUtterance();
-        msg.volume = volumeSlider.value;
-        msg.voice = voiceMap[voiceOptions.value];
-        msg.rate = rateSlider.value;
-        msg.Pitch = pitchSlider.value;
+        msg.volume = Number((<HTMLInputElement>volumeSlider).value);
+        msg.voice = voiceMap[(<HTMLInputElement>voiceOptions).value];
+        msg.rate = Number((<HTMLInputElement>rateSlider).value);
+        msg.pitch = Number((<HTMLInputElement>pitchSlider).value);
         msg.text = myText;
         window.speechSynthesis.speak(msg);
       };
             
             //______________________________SCRIPTING TEXT-TO-SPEECH SECTION END__________________________________
   
+            //______________________________SCRIPTING COOKIE OPERATIONS SECTION START_____________________________
+  
+      function setCookie(cname, cvalue, exhours) 
+      {
+          var d = new Date();
+          d.setTime(d.getTime() + (exhours * 60 * 1000));
+          var expires = "expires="+d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + "path=https://weatherappneel.000webhostapp.com/RefreadBotNeel/index4[WithEncryption&Token].html";
+      };
+  
+      function getCookie(cname) 
+      {
+          var name = cname + "=";
+          var ca = document.cookie.split(';');
+          for(var i = 0; i < ca.length; i++) 
+          {
+              var c = ca[i];
+              while (c.charAt(0) == ' ') 
+              {
+                  c = c.substring(1);
+              }
+              if (c.indexOf(name) == 0) 
+              {
+                  return c.substring(name.length, c.length);
+              }
+          }
+          return "";
+      };
+  
+      //______________________________SCRIPTING COOKIE OPERATIONS SECTION END_______________________________
+
+      //_____________________________MAKING INPUT FEILD - REQUIRED START___________________________________
+      
       function required(inputtx) 
          {
            if (inputtx.length == 0)
@@ -107,9 +118,9 @@
             return true; 
         }; 
   
-      //  _____________________________MAKING INPUT FEILD - REQUIRED END_____________________________________
+        //_____________________________MAKING INPUT FEILD - REQUIRED END_____________________________________
   
-      // _________________________TRIGGER BUTTON CLICK ON 'ENTER' KEY PRESS START___________________________
+      //_________________________TRIGGER BUTTON CLICK ON 'ENTER' KEY PRESS START___________________________
   
       var input = document.getElementById("sendText_id");
       input.addEventListener("keyup", function(event) 
@@ -120,13 +131,13 @@
           }
       });
   
-      // _________________________TRIGGER BUTTON CLICK ON 'ENTER' KEY PRESS END____________________________
+      //_________________________TRIGGER BUTTON CLICK ON 'ENTER' KEY PRESS END____________________________
   
-      // __________________________SCRIPTING TO DISPLAY WHAT USER SAID START_______________________________
+      //__________________________SCRIPTING TO DISPLAY WHAT USER SAID START_______________________________
   
       function displayWhatUserSaid()
       {
-        var UserMessage=document.getElementById("sendText_id").value;
+        var UserMessage="ME: " + (<HTMLInputElement>document.getElementById("sendText_id")).value;
         if(required(UserMessage)) 
         {
           var chatspaceVar = document.getElementById("chatspace_id");
@@ -142,37 +153,11 @@
       //__________________________SCRIPTING TO DISPLAY WHAT USER SAID END_________________________________
   
       //___SCRIPTING TO DISPLAY WHAT CHATBOT SAID START____SENDING MESSAGE TO CHATBOT API___START_________
-  
-      function displayWhatChatbotSaid()
-      {
-        var UserMessage=document.getElementById("sendText_id").value;
-        if(required(UserMessage)) 
-        {                                    
-          access_Chatbot_API();
-        }
-        else
-        {
-          alert("Your message is empty"); 
-        }
-      };
-  
-      //________________________________STANDARD RESPONSES SECTION START____________________________________
-  
-      Array.prototype.randomElement = function () 
-      {
-          return this[Math.floor(Math.random() * this.length)]
-      };
-  
-      myArray = ["Sorry, I guess the server is down. Not Refead's but mine!","Apologies, I think my backend has some problem. Talk to you later.","Really sorry, server's down I think. I'll go and wake him up. Can you please ping me after some time.","Very Sorry..But couldn't connect to the server","Sorry, my server's unreachable"];
-  
-      //________________________________STANDARD RESPONSES SECTION END_______________________________________
-  
-      //________________________________HITTING THE REST API SECTION START___________________________________
-  
+
       var domain;
       function displayWhatChatbotSaid()
       {
-        var UserMessage="ARJUN: " + (document.getElementById("sendText_id")).value;
+        var UserMessage="ARJUN: " + (<HTMLInputElement>document.getElementById("sendText_id")).value;
         if(required(UserMessage)) 
         {                                    
           domain = access_Chatbot_API();
@@ -190,21 +175,22 @@
   
       //________________________________STANDARD RESPONSES SECTION START____________________________________
   
-      (Array.prototype).randomElement = function () 
+      (<any>Array.prototype).randomElement = function () 
       {
           return this[Math.floor(Math.random() * this.length)]
       };
   
       var myArray = ["Sorry, I guess the server is down. Not Refead's but mine!","Apologies, I think my backend has some problem. Talk to you later.","Really sorry, server's down I think. I'll go and wake him up. Can you please ping me after some time.","Very Sorry..But couldn't connect to the server","Sorry, my server's unreachable"];
   
-      // ________________________________STANDARD RESPONSES SECTION END_______________________________________
+      //________________________________STANDARD RESPONSES SECTION END_______________________________________
   
-      // ________________________________HITTING THE REST API SECTION START___________________________________
+      //________________________________HITTING THE REST API SECTION START___________________________________
   
-      function access_Chatbot_API() {
+      function access_Chatbot_API()
+      {
         var i=0;
         var ourRequest = new XMLHttpRequest();
-        var UserMessage = (document.getElementById("sendText_id")).value;
+        var UserMessage = (<HTMLInputElement>document.getElementById("sendText_id")).value;
         var domain = "";
           
         //Encrypting the question we are passing with 000 as a kind of VALIDITY
@@ -218,14 +204,15 @@
   
         //ourRequest.setRequestHeader("ChatbotAPIAuthToken", token); //Added on 7/7/18
         //ourRequest.setRequestHeader("SessionID", sessionID); //Added on 7/7/18
-        ourRequest.onreadystatechange = function() {
+        ourRequest.onreadystatechange = function() 
+        {
           //Chatbot text
           if(ourRequest.readyState!=4 && ourRequest.status!=200)
           {
             if(i==1)
                          {
                             i=0;
-                          var myRandomElement = (myArray).randomElement();
+                          var myRandomElement = (<any>myArray).randomElement();
                              var ChatbotMessage= myRandomElement ; 
                           var chatspaceVar = document.getElementById("chatspace_id")
                             chatspaceVar.innerHTML += '<div class="chatbotMessage" style="background-color: blue">ARJUN: '+ChatbotMessage+'</div>';
@@ -234,7 +221,7 @@
                             }
                             speak(ChatbotMessage);
                             chatspaceVar.scrollTop=chatspaceVar.scrollHeight;
-                            (document.getElementById("sendText_id")).value="";
+                            (<HTMLInputElement>document.getElementById("sendText_id")).value="";
                         }
           }	
                     else
@@ -249,10 +236,11 @@
                             chatspaceVar.innerHTML += '<div class="chatbotMessage">'+ourRequest.responseText+'</div>';
                             if(String(ourRequest.responseText).startsWith("Redirecting")) {
                               domain = String(ourRequest.responseText).split(':')[1];
+                              console.log(String(ourRequest.responseText).split(':'));
                             }
                             speak(ourRequest.responseText);
                              chatspaceVar.scrollTop=chatspaceVar.scrollHeight;
-                             (document.getElementById("sendText_id")).value="";
+                             (<HTMLInputElement>document.getElementById("sendText_id")).value="";
                          }
                      }
         };
@@ -260,7 +248,7 @@
         ourRequest.send();
         return domain;
       };
-  
+
       //________________________________HITTING THE REST API SECTION END________________________________
   
       //___SCRIPTING TO DISPLAY WHAT CHATBOT SAID START____SENDING MESSAGE TO CHATBOT API___END_________
@@ -269,12 +257,12 @@
   
       function speechToTextConversion()
       {			
-        var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-        var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+        var SpeechRecognition = SpeechRecognition || Window['webkitSpeechRecognition'];
+        var SpeechRecognitionEvent = SpeechRecognitionEvent || Window['webkitSpeechRecognitionEvent'];
         var recognition = new SpeechRecognition();
         var diagnostic = document.getElementById('sendText_id');
         var i=0;
-                var j=0;
+        var j=0;
         recognition.continuous = true;
         recognition.lang = 'en-IN';
         recognition.interimResults = true;
@@ -293,39 +281,39 @@
                 }
                 else
                 {
-                    if(document.getElementById("Hindi").checked)
+                    if((<HTMLInputElement>document.getElementById("Hindi")).checked)
                     {
                         recognition.lang = 'hi-IN';
                     }
-                    else if(document.getElementById("Gujarati").checked)
+                    else if((<HTMLInputElement>document.getElementById("Gujarati")).checked)
                     {
                         recognition.lang = 'gu-IN';
                     }
-                    else if(document.getElementById("Bengali").checked)
+                    else if((<HTMLInputElement>document.getElementById("Bengali")).checked)
                     {
                         recognition.lang = 'bn-IN';   
                     }
-                    else if(document.getElementById("Kannada").checked)
+                    else if((<HTMLInputElement>document.getElementById("Kannada")).checked)
                     {
                         recognition.lang = 'kn-IN';   
                     }
-                    else if(document.getElementById("Malayalam").checked)
+                    else if((<HTMLInputElement>document.getElementById("Malayalam")).checked)
                     {
                         recognition.lang = 'ml-IN';   
                     }
-                    else if(document.getElementById("Marathi").checked)
+                    else if((<HTMLInputElement>document.getElementById("Marathi")).checked)
                     {
                         recognition.lang = 'mr-IN';   
                     }
-                    else if(document.getElementById("Tamil").checked)
+                    else if((<HTMLInputElement>document.getElementById("Tamil")).checked)
                     {
                         recognition.lang = 'ta-IN';   
                     }
-                    else if(document.getElementById("Telugu").checked)
+                    else if((<HTMLInputElement>document.getElementById("Telegu")).checked)
                     {
                         recognition.lang = 'te-IN';   
                     }
-                    else if(document.getElementById("Urdu").checked)
+                    else if((<HTMLInputElement>document.getElementById("Urdu")).checked)
                     {
                         recognition.lang = 'ur-IN';   
                     }
@@ -348,23 +336,29 @@
         recognition.onresult = function(event) {
           var last = event.results.length - 1;
           var convertedText = event.results[last][0].transcript;
-          diagnostic.value = convertedText;
+          (<HTMLInputElement>diagnostic).value = convertedText;
           console.log('Confidence: ' + event.results[0][0].confidence);
         }
         recognition.onnomatch = function(event) {
-          diagnostic.value = 'I didnt recognise that.';
+          (<HTMLInputElement>diagnostic).value = 'I didnt recognise that.';
         }
         recognition.onerror = function(event) {
-          diagnostic.value = 'Error occurred in recognition: ' + event.error;
+          (<HTMLInputElement>diagnostic).value = 'Error occurred in recognition: ' + event.error;
         }
   
         //_____________________________SPEECH RECOGNITION EVENTS END________________________________
       };
-  
-      //__________________________SCRIPTING - SPEECH RECOGNITION END__________________________________
-      </script>
-      <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  }
 
-  <app-root></app-root>
-</body>
-</html>
+  display_sendButton_Now(){document.getElementById('sendButton_id').style.visibility='visible'};
+  hide_sendButton_Now(){document.getElementById('sendButton_id').style.visibility='hidden'};
+  display_sendText_Now(){document.getElementById('sendText_id').style.visibility='visible';document.getElementById('sendText_id').focus();};
+  hide_sendText_Now(){document.getElementById('sendText_id').style.visibility='hidden';};
+  display_chatspace_Now(){document.getElementById('chatspace_id').style.display='block';};
+  hide_chatspace_Now(){document.getElementById('chatspace_id').style.display='none'};
+  display_chatlogo_Now(){document.getElementById('chatspace_logo_id').style.display='block';};
+  hide_chatlogo_Now(){document.getElementById('chatspace_logo_id').style.display='none';};
+  display_speechToTextButton_Now(){document.getElementById('speechToText_id').style.visibility='visible';};
+  hide_speechToTextButton_Now(){document.getElementById('speechToText_id').style.visibility='hidden';};
+
+}
