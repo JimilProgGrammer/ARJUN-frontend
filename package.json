@@ -24,7 +24,7 @@
     "core-js": "^2.5.4",
     "jquery": "^3.4.1",
     "jquery-autocomplete": "^1.2.8",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.0",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "ngx-drag-scroll": "^8.0.0-beta.1",
